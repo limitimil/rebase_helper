@@ -47,12 +47,14 @@ class RebaseHelper:
             if commitId == ws.head.commit or ws.is_dirty():
                 return
             self.post_stage_when_success()
-        except:
+        except Exception as e:
+            print(e)
             self.set_workspace()
 
     # Post Handler When Success
     def post_stage_when_success(self):
         ws = self.current
+        print('branch {} is going to be pushed.'.format(ws.active_branch.name))
         ws.git.push('origin', ws.active_branch.name, '-f')
 
 if __name__ == '__main__':
