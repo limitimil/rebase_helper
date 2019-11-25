@@ -5,7 +5,14 @@ import tqdm
 class RebaseHelper:
     repos = []
     current = None
-    base_branch = 'origin/develop'
+    target_log = []
+    _base_branch = 'origin/develop'
+
+    @property
+    def base_branch(self):
+        if self.target_log[-1].get('reference_branch', None):
+            return self.target_log[-1]['reference_branch']
+        return self._base_branch
 
     @property
     def current(self):
@@ -31,6 +38,7 @@ class RebaseHelper:
     def run(self):
         for target in tqdm.tqdm(config):
             self.set_workspace(target)
+            self.target_log.append(target)
             self.rebase_worker(target)
 
     def rebase_worker(self, target):
