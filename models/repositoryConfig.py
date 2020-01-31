@@ -14,6 +14,9 @@ class RepositoryConfig:
         self.branches = config['branches']
         self.reference_branch = config.get('reference_branch', 'origin/develop')
         self.plugin_actions = config.get('plugin_actions', None)
+    @property
+    def work_load(self):
+        return len(self.branches)
 
     def __iter__(self):
         self._iter_pos = 0

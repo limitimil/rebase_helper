@@ -18,6 +18,7 @@ class RebaseHandler(gitCurator.GitCurator):
             self.current_repo.git.add('-u')
             self.current_repo.git.commit(
                 '-m', 'npm run lint by automation tool')
+        print('Push branch {}'.format(self.current_branch))
 
     def setup_repo(self, metadata):
         self.reference_branch = metadata.reference_branch
@@ -35,6 +36,6 @@ class RebaseHandler(gitCurator.GitCurator):
 
 
 if __name__ == '__main__':
-    repos = map(lambda x: RepositoryConfig(x), config.config)
+    repos = list(map(lambda x: RepositoryConfig(x), config.config))
     handler = RebaseHandler()
     handler.run_for_each_repo(repos)
