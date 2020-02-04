@@ -23,16 +23,20 @@ class RebaseHandler(gitCurator.GitCurator):
     def setup_repo(self, metadata):
         self.reference_branch = metadata.reference_branch
         self.plugin_actions = metadata.plugin_actions
+        print('working on repository: {}'.format(metadata.url))
 
     def run(self, metadata):
         commitId = self.current_repo.head.commit
         self.current_repo.git.checkout(self.current_branch)
         self.before_rebase(metadata)
         self.current_repo.git.rebase(self.reference_branch)
-        if commitId == self.current_repo.head.commit or self.current_repo.is_dirty():
-            raise Exception("rebase fail")
+        if self.current_repo.is_dirty():
+            raise Exception("rebase fail on branch: {}".format(self.current_branch))
         self.before_push(metadata)
-        self.current_repo.git.push('origin', self.current_branch, '-f')
+        if commitId != self.current_repo.head.commit:
+            self.current_repo.git.push('origin', self.current_branch, '-f')
+        else:
+            print('Branch {} don\'t need to be push'.format(self.current_branch))
 
 
 if __name__ == '__main__':
