@@ -1,5 +1,6 @@
 import worker
 import tempfile
+from utils.logging import logger
 
 class GitCurator(worker.Worker):
     def __init__(self):
@@ -26,3 +27,4 @@ class GitCurator(worker.Worker):
 
     def handle_error(self, error):
         self.is_dirty_workspace = True
+        logger.exception('GitCurator')
