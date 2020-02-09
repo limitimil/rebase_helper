@@ -4,6 +4,7 @@ import gitCurator
 import config
 from models.repositoryConfig import RepositoryConfig
 from services.vue_lint_controller import VueLintController
+from utils.logging import logger
 
 
 class RebaseHandler(gitCurator.GitCurator):
@@ -18,12 +19,12 @@ class RebaseHandler(gitCurator.GitCurator):
             self.current_repo.git.add('-u')
             self.current_repo.git.commit(
                 '-m', 'npm run lint by automation tool')
-        print('Push branch {}'.format(self.current_branch))
+        logger.info('Push branch {}'.format(self.current_branch))
 
     def setup_repo(self, metadata):
         self.reference_branch = metadata.reference_branch
         self.plugin_actions = metadata.plugin_actions
-        print('working on repository: {}'.format(metadata.url))
+        logger.info('working on repository: {}'.format(metadata.url))
 
     def run(self, metadata):
         commitId = self.current_repo.head.commit
@@ -36,7 +37,7 @@ class RebaseHandler(gitCurator.GitCurator):
         if commitId != self.current_repo.head.commit:
             self.current_repo.git.push('origin', self.current_branch, '-f')
         else:
-            print('Branch {} don\'t need to be push'.format(self.current_branch))
+            logger.info('Branch {} don\'t need to be push'.format(self.current_branch))
 
 
 if __name__ == '__main__':
