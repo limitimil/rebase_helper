@@ -13,7 +13,7 @@ class RepositoryConfig:
         self.url = config['repository_url']
         self.branches = config['branches']
         self.reference_branch = config.get('reference_branch', 'origin/develop')
-        self.plugin_actions = config.get('plugin_actions', None)
+        self.plugin_actions = config.get('plugin_actions', {})
     @property
     def work_load(self):
         return len(self.branches)

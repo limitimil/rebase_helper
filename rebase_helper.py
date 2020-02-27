@@ -16,9 +16,12 @@ class RebaseHandler(gitCurator.GitCurator):
             controller = VueLintController(os.path.join(
                 self.current_workspace, self.plugin_actions['vue-lint']['path']))
             controller.run()
-            self.current_repo.git.add('-u')
-            self.current_repo.git.commit(
-                '-m', 'npm run lint by automation tool')
+            try:
+                self.current_repo.git.add('-u')
+                self.current_repo.git.commit(
+                    '-m', 'npm run lint by automation tool')
+            except git.exc.GitCommandError:
+                logger.info('No lint has been done for branch {}'.format(self.current_branch))
         logger.info('Push branch {}'.format(self.current_branch))
 
     def setup_repo(self, metadata):
