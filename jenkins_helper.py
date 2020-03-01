@@ -9,8 +9,9 @@ from utils.logging import logger
 class JenkinsHandler(jenkinsCurator.JenkinsCurator):
     _server = None
 
+    @property
     def server(self):
-        if self._server:
+        if not self._server:
             raise Exception
         return self._server
 
@@ -21,7 +22,7 @@ class JenkinsHandler(jenkinsCurator.JenkinsCurator):
     def run(self, branch):
         self.server.build_job('{job}/{branch}'.format(
             job = self._current_job,
-            branch = metadata
+            branch = branch
         ))
 
 
@@ -29,5 +30,5 @@ if __name__ == '__main__':
     jobs = list(map(lambda x: JenkinsConfig(x), another_config.config))
     handler = JenkinsHandler()
     handler._server = jenkins.Jenkins('http://192.168.96.25:8082', username='liminchien', password='xxxx')
-    handler.run_for_each_repo(repos)
+    handler.run_for_each_repo(jobs)
 

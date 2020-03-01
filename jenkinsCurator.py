@@ -16,7 +16,7 @@ class JenkinsCurator(another_worker.Worker):
 
     def setup_branch(self, metadata):
         if self.is_dirty_workspace == True:
-            self.create_workspace(self.current_repo.remotes.origin.url)
+            self.create_workspace(self.current_repo)
             self.is_dirty_workspace = False
         workspace = self.current_repo
 

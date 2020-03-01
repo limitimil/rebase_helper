@@ -22,6 +22,7 @@ class Worker(abc.ABC):
     def create_workspace(self,url):
         p = tempfile.mkdtemp()
         self.workspace_history.append(p)
+        self.repo_history.append(url)
 
     def clean_repo(self):
         pass
