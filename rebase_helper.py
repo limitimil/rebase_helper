@@ -4,6 +4,7 @@ import gitCurator
 import config
 from models.repositoryConfig import RepositoryConfig
 from services.vue_lint_controller import VueLintController
+from services.python_lint_controller import PythonLintController
 from utils.logging import logger
 
 
@@ -12,6 +13,15 @@ class RebaseHandler(gitCurator.GitCurator):
         pass
 
     def before_push(self, metadata):
+        if 'python-lint' in self.plugin_actions:
+            controller = PythonLintController(self.current_workspace)
+            controller.run(**self.plugin_actions['python-lint'])
+            try:
+                self.current_repo.git.add('-u')
+                self.current_repo.git.commit(
+                    '-m', 'autopep8 by automation tool')
+            except git.exc.GitCommandError:
+                logger.info('No lint has been done for branch {}'.format(self.current_branch))
         if 'vue-lint' in self.plugin_actions:
             controller = VueLintController(os.path.join(
                 self.current_workspace, self.plugin_actions['vue-lint']['path']))
