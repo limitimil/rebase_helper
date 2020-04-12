@@ -4,8 +4,12 @@ from subprocess import Popen
 SCRIPT = " python -m autopep8 -i {file_path} --ignore E402"
 exception_files = [
     'testtools/api_testing_builder/api_testing_builder/generator/api_request/robot_api_request_generator.py',
-    'testutils/edc_simulator/EDCSimFormAuto.py'
+    'testutils/edc_simulator/EDCSimFormAuto.py',
+    'testtools/performance_testing/delete_receipts_in_services.py',
+    'testutils/utils/test_data_utils/data_generator.py',
+    'testutils/utils/test_data_utils/utils.py',
 ]
+exception_files = list(map(lambda x: os.path.normpath(x), exception_files))
 class PythonLintController:
     history = []
 
@@ -25,14 +29,15 @@ class PythonLintController:
     def run(self, **kwargs):
         folders = kwargs.get('targets', [])
         folders = list(map(lambda x: os.path.join(self.working_directory, x), folders))
+        exceptions = list(map(lambda x: os.path.join(self.working_directory, x), exception_files))
         files = []
         for f in folders:
             files.extend(self._get_python_paths(f))
         for f in files:
-            if f in exception_files:
+            if f in exceptions:
                 continue
             process = Popen(SCRIPT.format(file_path=f),
-                stdout=subprocess.PIPE, shell=True, cwd = self.working_directory
+                stdout=subprocess.PIPE, shell=True
             )
             result = process.communicate()
             self.history.append(result)
