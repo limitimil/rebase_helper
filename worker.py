@@ -34,22 +34,30 @@ class Worker(abc.ABC):
         for repo in tqdm.tqdm(repo_configuration):
             #setup
             self.create_workspace(repo.url)
-            self.setup_repo(repo)
-            #execute
-            self.run_with_error_handler(repo, self.run_for_each_branch)
-            #teardown
-            self.teardown_repo(repo)
+            try :
+                self.setup_repo(repo)
+                #execute
+                self.run_with_error_handler(repo, self.run_for_each_branch)
+                #teardown
+                self.teardown_repo(repo)
+            except Exception as e:
+                print(e)
+                self.handle_error(e)
 
     def run_for_each_branch(self, branch_configuration):
         for branch in tqdm.tqdm(branch_configuration, total=branch_configuration.work_load):
             self.branch_history.append(branch)
             #setup
             self.clean_repo()
-            self.setup_branch(branch)
-            #execute
-            self.run_with_error_handler(branch, self.run)
-            #teardown
-            self.teardown_branch(branch)
+            try :
+                self.setup_branch(branch)
+                #execute
+                self.run_with_error_handler(branch, self.run)
+                #teardown
+                self.teardown_branch(branch)
+            except Exception as e:
+                print(e)
+                self.handle_error(e)
 
     def run_with_error_handler(self, metadata, func):
         try:
