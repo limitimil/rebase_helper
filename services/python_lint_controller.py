@@ -1,7 +1,7 @@
 import os
 import subprocess
 from subprocess import Popen
-SCRIPT = " python -m autopep8 -i {file_path} --ignore E402"
+SCRIPT = " python -m autopep8 -i {file_path} --ignore E402 --max-line-length 120"
 exception_files = [
     'testtools/api_testing_builder/api_testing_builder/generator/api_request/robot_api_request_generator.py',
     'testutils/edc_simulator/EDCSimFormAuto.py',
