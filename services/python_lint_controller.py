@@ -51,3 +51,9 @@ class PythonLintController:
             result = process.communicate()
             self.history.append(result)
         return self.history
+
+if __name__ == '__main__':
+    controller = PythonLintController(
+        'C:\\Users\\limin\\limin\\cybersoft\\Projects\\CyberSoft.MiniTis.Testing')
+    controller.run(**{
+        'targets': ['testutils']})
