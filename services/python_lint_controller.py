@@ -8,6 +8,7 @@ exception_files = [
     'testtools/performance_testing/delete_receipts_in_services.py',
     'testutils/utils/test_data_utils/data_generator.py',
     'testutils/utils/test_data_utils/utils.py',
+    'testutils/api_models/'
 ]
 exception_files = list(map(lambda x: os.path.normpath(x), exception_files))
 class PythonLintController:
@@ -26,6 +27,14 @@ class PythonLintController:
 
         return files
 
+    def _is_in_exceptions(self, f, exceptions):
+        if f in exceptions:
+            return True
+        for exc in exceptions:
+            if f.startswith(exc):
+                return True
+        return False
+
     def run(self, **kwargs):
         folders = kwargs.get('targets', [])
         folders = list(map(lambda x: os.path.join(self.working_directory, x), folders))
@@ -34,7 +43,7 @@ class PythonLintController:
         for f in folders:
             files.extend(self._get_python_paths(f))
         for f in files:
-            if f in exceptions:
+            if self._is_in_exceptions(f, exceptions):
                 continue
             process = Popen(SCRIPT.format(file_path=f),
                 stdout=subprocess.PIPE, shell=True
