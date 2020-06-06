@@ -57,3 +57,5 @@ if __name__ == '__main__':
     repos = list(map(lambda x: RepositoryConfig(x), config.config))
     handler = RebaseHandler()
     handler.run_for_each_repo(repos)
+    print(handler.workspace_history)
+    handler.remove_all_workspace()

@@ -2,7 +2,7 @@ import git
 import tempfile
 import tqdm
 import abc
-
+import os
 class Worker(abc.ABC):
     repo_history = []
     branch_history = []
@@ -65,6 +65,11 @@ class Worker(abc.ABC):
         except Exception as e:
             print(e)
             self.handle_error(e)
+
+    def remove_all_workspace(self):
+        for folder in self.workspace_history:
+            os.system("rd /s/q {}".format(folder))
+        self.workspace_history = []
 
     @abc.abstractmethod
     def run(self, metadata):
