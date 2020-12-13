@@ -258,3 +258,6 @@ report.html
 #VIM
 *.swp
 *.swo
+
+#Web development
+*.zip
