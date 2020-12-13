@@ -26,7 +26,7 @@ app = Flask(__name__)
 app.config['CORS_EXPOSE_HEADERS'] = 'Content-Disposition, X-Total-Count'
 CORS(app)
 
-@app.route('/poc', method=['GET'])
+@app.route('/poc', methods=['GET'])
 def poc():
     request_payload = {
                 'repository_url':'http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting',
@@ -42,9 +42,9 @@ def poc():
                 }
         }
 
-    rc = RepositoryConfig(request_payload)
+    rc = [ RepositoryConfig(request_payload) ] 
     rh = RebaseHandler()
-    rh.run_for_each_repo(repos)
+    rh.run_for_each_repo(rc)
     rh.remove_all_workspace()
     return 'Done', 200 
 
