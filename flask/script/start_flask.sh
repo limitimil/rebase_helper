@@ -1,3 +1,4 @@
+SCRIPT_DIR="$( cd "$( dirname ${BASH_SOURCE[0]} )" >/dev/null 2>&1 && pwd )"
 export FLASK_APP=main.py
 export FLASK_DEBUG=1
-python3 -m flask run --port 9007 --host 0.0.0.0
+export PYTHONPATH=$SCRIPT_DIR/../../:$SCRIPT_DIR/../
