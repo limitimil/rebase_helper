@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import jsonify
+from flask import request
 from flask import send_from_directory
 from flask import make_response
 from flask import current_app
@@ -25,19 +26,8 @@ file_logger = logging.getLogger('flask')
 
 @app.route('/poc', methods=['POST'])
 def poc():
-    request_payload = {
-                'repository_url':'http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting',
-                'branches': [
-                    'tool-CTIS-xxxx',
-                    'tool-CTIS-2149',
-                    ],
-                'plugin_actions': {
-                        'python-lint':{
-                                'name': 'python-lint',
-                                'targets': ['testtools', 'testutils', 'unittests'],
-                        }
-                }
-        }
+    request_payload = request.form.to_dict()
+    request_payload['branches'] = [ request.form['branch'] ]
 
     rc = [ RepositoryConfig(request_payload) ] 
     rh = RebaseHandler()
