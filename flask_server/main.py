@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import jsonify
-from flask import Flask
 from flask import send_from_directory
 from flask import make_response
 from flask import current_app
-from flask import request
-from flask_cors import CORS
 
 from models.repositoryConfig import RepositoryConfig
 from rebase_helper import RebaseHandler
@@ -15,6 +12,9 @@ import os
 import logging
 import logging.config
 
+from __init__ import app
+import views 
+
 _PATH = os.path.dirname(os.path.abspath(__file__))
 _PATH = os.path.join(_PATH, 'logging.ini')
 DEFAULT_LOG_CONFIG = os.path.abspath(_PATH)
@@ -22,11 +22,8 @@ DEFAULT_LOG_CONFIG = os.path.abspath(_PATH)
 logging.config.fileConfig(DEFAULT_LOG_CONFIG)
 file_logger = logging.getLogger('flask')
 
-app = Flask(__name__)
-app.config['CORS_EXPOSE_HEADERS'] = 'Content-Disposition, X-Total-Count'
-CORS(app)
 
-@app.route('/poc', methods=['GET'])
+@app.route('/poc', methods=['POST'])
 def poc():
     request_payload = {
                 'repository_url':'http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting',
