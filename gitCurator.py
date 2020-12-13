@@ -1,7 +1,15 @@
 import worker
 import tempfile
+import os
+
 from utils.logging import logger
 
+project_dir = os.path.dirname(os.path.abspath(__file__))
+os.environ['GIT_ASKPASS'] = os.path.join(
+    project_dir,
+    'utils',
+    'git_askpasswd.py'
+)
 class GitCurator(worker.Worker):
     def __init__(self):
         self.is_dirty_workspace = False
