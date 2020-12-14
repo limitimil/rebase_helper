@@ -24,8 +24,8 @@ logging.config.fileConfig(DEFAULT_LOG_CONFIG)
 file_logger = logging.getLogger('flask')
 
 
-@app.route('/poc', methods=['POST'])
-def poc():
+@app.route('/rebase/execute', methods=['POST'])
+def execute():
     request_payload = request.form.to_dict()
     request_payload['branches'] = [ request.form['branch'] ]
 
