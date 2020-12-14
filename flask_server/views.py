@@ -11,4 +11,4 @@ class ReusableForm(Form):
     @app.route("/rebase", methods=['GET', 'POST'])
     def rebase():
         form = ReusableForm(request.form)
-        return render_template('hello.html', form=form)
+        return render_template('rebase.html', form=form)
