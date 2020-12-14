@@ -261,3 +261,4 @@ report.html
 
 #Web development
 *.zip
+node_modules
