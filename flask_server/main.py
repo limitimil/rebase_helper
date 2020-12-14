@@ -23,6 +23,18 @@ DEFAULT_LOG_CONFIG = os.path.abspath(_PATH)
 logging.config.fileConfig(DEFAULT_LOG_CONFIG)
 file_logger = logging.getLogger('flask')
 
+@app.route('/api/rebase/execute', methods=['POST'])
+def api_execute():
+    ## TODO: model transform should defined as model for readability.
+    request_payload = {}
+    request_payload['branches'] = [ request.json['branch'] ]
+    request_payload['repository_url'] = request.json['url']
+
+    rc = [ RepositoryConfig(request_payload) ] 
+    rh = RebaseHandler()
+    rh.run_for_each_repo(rc)
+    rh.remove_all_workspace()
+    return 'Done', 200 
 
 @app.route('/rebase/execute', methods=['POST'])
 def execute():
