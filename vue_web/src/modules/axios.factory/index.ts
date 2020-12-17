@@ -20,6 +20,7 @@ axios.interceptors.response.use(
     return response;
   },
   async (error: any) => {
+    // TODO: define a general request fail handling behavior.
       return Promise.reject(error);
   },
 );
