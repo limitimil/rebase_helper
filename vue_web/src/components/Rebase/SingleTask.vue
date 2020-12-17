@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import axiosFactory from '@/modules/axios.factory';
+import axios from '@/modules/axios.factory';
 
 export default Vue.extend({
   name: 'New-Component',
@@ -30,7 +30,7 @@ export default Vue.extend({
         branch: "",
       }] as any[],
       helloworold: 'helloworld' as string,
-      axios: axiosFactory() as any,
+      axios: axios as any,
     };
   },
   computed: {
