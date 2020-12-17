@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import axios from '@/modules/axios.factory';
+import RebaseService from '@/services/rebase';
 
 export default Vue.extend({
   name: 'New-Component',
@@ -30,7 +30,6 @@ export default Vue.extend({
         branch: "",
       }] as any[],
       helloworold: 'helloworld' as string,
-      axios: axios as any,
     };
   },
   computed: {
@@ -47,10 +46,10 @@ export default Vue.extend({
     async start() {
       // TODO: api calls should extract to another module
       // TODO: should handler not 200 response
-      const path = '/api/rebase/execute';
       try {
         this.$Loading.start();
-        await this.axios.post(path, this.payloads[0]);
+        const service = new RebaseService();
+        await service.executeSingleTaskAsync(this.payloads[0]);
         this.$Loading.finish();
       } catch (err) {
         this.$Loading.error();
