@@ -1,10 +1,10 @@
 <template>
-  <div v-on:keydown.shift.187.prevent="newSlot">
+  <div v-on:keydown.shift.187.prevent="newSlot" class="task-root">
     <h1>Rebase: {{mode}} Task</h1>
     <p>press 'enter' to start</p>
     <p>press '+' to create new slot</p>
     <div class="hack1">{{payloads}}</div>
-    <div class="container-fluid" v-on:keyup.enter="start">
+    <div class="container-fluid task-wrapper" v-on:keyup.enter="start" :class="currentStatus">
       <div v-for="p in payloads" class="row" style="padding-top: 1em">
         <label class="col-lg-3 col-md-6" for="">Repository Url:</label>
         <Input class="col-lg-3 col-md-6" v-model="p.url"></Input>
