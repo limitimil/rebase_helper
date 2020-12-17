@@ -3,8 +3,8 @@ import tempfile
 import tqdm
 import abc
 import os
-import shutil
 
+from utils.system_functions import remove_folder
 class Worker(abc.ABC):
     repo_history = []
     branch_history = []
@@ -70,7 +70,7 @@ class Worker(abc.ABC):
 
     def remove_all_workspace(self):
         for folder in self.workspace_history:
-            shutil.rmtree(folder)
+            remove_folder(folder)
         self.workspace_history = []
 
     @abc.abstractmethod
