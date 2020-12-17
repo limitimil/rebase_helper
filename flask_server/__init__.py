@@ -1,9 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_bootstrap import Bootstrap
 
-static_folder = 'bootstrap'
-app = Flask(__name__, static_folder=static_folder)
+app = Flask(__name__)
 ## for form
 app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 CORS(app)
+Bootstrap(app)
 
