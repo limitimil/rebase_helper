@@ -5,7 +5,6 @@ import abc
 import os
 
 from utils.system_functions import remove_folder
-from utils.wrappers import FeatureToggle
 
 class Worker(abc.ABC):
     repo_history = []
@@ -70,7 +69,6 @@ class Worker(abc.ABC):
             print(e)
             self.handle_error(e)
 
-    @FeatureToggle.disable
     def remove_all_workspace(self):
         for folder in self.workspace_history:
             remove_folder(folder)
