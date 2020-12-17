@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import jsonify
 from flask import request
-from flask import send_from_directory
-from flask import make_response
-from flask import current_app
 
 from models.repositoryConfig import RepositoryConfig
 from rebase_helper import RebaseHandler
