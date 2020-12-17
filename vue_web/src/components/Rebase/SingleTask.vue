@@ -17,7 +17,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import RebaseService from '@/services/rebase';
-
+enum EnumCurrentStatus{
+  WaitInput= 'wait-input',
+  InProgress= 'in-progress',
+};
 export default Vue.extend({
   name: 'New-Component',
   props: [],
@@ -29,7 +32,8 @@ export default Vue.extend({
         url: "",
         branch: "",
       }] as any[],
-      helloworold: 'helloworld' as string,
+      currentStatus: EnumCurrentStatus.WaitInput,
+      EnumCurrentStatus
     };
   },
   computed: {
@@ -38,6 +42,12 @@ export default Vue.extend({
     }
   },
   methods: {
+    initiPayloads(){
+      this.payloads = [{
+        url: "",
+        branch: "",
+      }];
+    }
     newSlot() {
       const newObj = {};
       Object.assign(newObj, this.payloads[this.payloads.length -1 ])
@@ -48,17 +58,24 @@ export default Vue.extend({
       // TODO: should handler not 200 response
       try {
         this.$Loading.start();
+        this.currentStatus = EnumCurrentStatus.InProgress;
         const service = new RebaseService();
-        await service.executeSingleTaskAsync(this.payloads[0]);
+        while(this.payloads.length){
+          await service.executeSingleTaskAsync(this.payloads[0]);
+          this.payload.shift();
+        }
         this.$Loading.finish();
+        this.currentStatus = EnumCurrentStatus.WaitInput;
       } catch (err) {
         this.$Loading.error();
+        this.currentStatus = EnumCurrentStatus.WaitInput;
       }
     },
   },
 });
 </script>
 <style scoped lang="less">
+  // hack
 .hack1{
  background-color: hsla(208, 26%, 75%, 1);
 }
@@ -73,6 +90,11 @@ export default Vue.extend({
 }
 .hack5{
  background-color: hsla(240, 7%, 47%, 1);
+}
+  // feature
+
+.in-progress > .row:first-child {
+  background-color: yellow;
 }
 </style>
 
