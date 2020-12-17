@@ -44,10 +44,6 @@ def execute():
     rh.remove_all_workspace()
     return 'Done', 200 
 
-@app.route('/helloworld', methods=['GET'])
-def helloworld():
-    return 'helloworld', 200
-
 @app.errorhandler(Exception)
 def handle_error(e):
     code = 500
