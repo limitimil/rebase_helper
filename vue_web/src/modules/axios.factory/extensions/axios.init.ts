@@ -6,7 +6,7 @@ import { AxiosRequestConfig } from 'axios';
 
 export const httpInitRequest = (config: AxiosRequestConfig) => {
 
-  config.baseURL = "http://192.168.107.135:9016";
+  config.baseURL = "http://192.168.107.135:9016/";
 
 };
 

@@ -1,10 +1,10 @@
 <template>
-  <div v-on:keydown.shift.187.prevent="newSlot">
+  <div v-on:keydown.shift.187.prevent="newSlot" class="task-root">
     <h1>Rebase: {{mode}} Task</h1>
     <p>press 'enter' to start</p>
     <p>press '+' to create new slot</p>
     <div class="hack1">{{payloads}}</div>
-    <div class="container-fluid" v-on:keyup.enter="start">
+    <div class="container-fluid task-wrapper" v-on:keyup.enter="start" :class="currentStatus">
       <div v-for="p in payloads" class="row" style="padding-top: 1em">
         <label class="col-lg-3 col-md-6" for="">Repository Url:</label>
         <Input class="col-lg-3 col-md-6" v-model="p.url"></Input>
@@ -16,8 +16,12 @@
 </template>
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import axios from '@/modules/axios.factory';
-
+import RebaseService from '@/services/rebase';
+enum EnumCurrentStatus{
+  WaitInput= 'wait-input',
+  InProgress= 'in-progress',
+  GetError= 'get-error',
+};
 export default Vue.extend({
   name: 'New-Component',
   props: [],
@@ -29,8 +33,8 @@ export default Vue.extend({
         url: "",
         branch: "",
       }] as any[],
-      helloworold: 'helloworld' as string,
-      axios: axios as any,
+      currentStatus: EnumCurrentStatus.WaitInput,
+      EnumCurrentStatus
     };
   },
   computed: {
@@ -39,6 +43,12 @@ export default Vue.extend({
     }
   },
   methods: {
+    initiPayloads(){
+      this.payloads = [{
+        url: "",
+        branch: "",
+      }];
+    },
     newSlot() {
       const newObj = {};
       Object.assign(newObj, this.payloads[this.payloads.length -1 ])
@@ -47,19 +57,27 @@ export default Vue.extend({
     async start() {
       // TODO: api calls should extract to another module
       // TODO: should handler not 200 response
-      const path = '/api/rebase/execute';
       try {
         this.$Loading.start();
-        await this.axios.post(path, this.payloads[0]);
+        this.currentStatus = EnumCurrentStatus.InProgress;
+        const service = new RebaseService();
+        while(this.payloads.length){
+          await service.executeSingleTaskAsync(this.payloads[0]);
+          this.payloads.shift();
+        }
         this.$Loading.finish();
+        this.currentStatus = EnumCurrentStatus.WaitInput;
+        this.newSlot();
       } catch (err) {
         this.$Loading.error();
+        this.currentStatus = EnumCurrentStatus.GetError;
       }
     },
   },
 });
 </script>
 <style scoped lang="less">
+  // hack
 .hack1{
  background-color: hsla(208, 26%, 75%, 1);
 }
@@ -74,6 +92,14 @@ export default Vue.extend({
 }
 .hack5{
  background-color: hsla(240, 7%, 47%, 1);
+}
+  // feature
+
+.in-progress > .row:first-child {
+  background-color: yellow;
+}
+.get-error > .row:first-child {
+  background-color: red;
 }
 </style>
 

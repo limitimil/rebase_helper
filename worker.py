@@ -5,6 +5,7 @@ import abc
 import os
 
 from utils.system_functions import remove_folder
+
 class Worker(abc.ABC):
     repo_history = []
     branch_history = []
