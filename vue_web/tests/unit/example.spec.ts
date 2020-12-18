@@ -7,11 +7,4 @@ describe('RebaseSingleTask.vue', () => {
     const wrapper = shallowMount(RebaseSingleTask, { });
     expect(wrapper.text()).toMatch('Single');
   });
-  it('keyevent and check api calls', () => {
-    const wrapper = shallowMount(RebaseSingleTask, { });
-    wrapper.find('.task-root').trigger('keydown.shift.187');
-    wrapper.find('.task-root').trigger('keydown.shift.187');
-    wrapper.find('.task-root').trigger('keydown.shift.187');
-    wrapper.find('.task-wrapper').trigger('keyup.enter');
-  });
 });
