@@ -67,6 +67,7 @@ export default Vue.extend({
         }
         this.$Loading.finish();
         this.currentStatus = EnumCurrentStatus.WaitInput;
+        this.newSlot();
       } catch (err) {
         this.$Loading.error();
         this.currentStatus = EnumCurrentStatus.GetError;
