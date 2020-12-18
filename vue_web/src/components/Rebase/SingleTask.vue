@@ -20,6 +20,7 @@ import RebaseService from '@/services/rebase';
 enum EnumCurrentStatus{
   WaitInput= 'wait-input',
   InProgress= 'in-progress',
+  GetError= 'get-error',
 };
 export default Vue.extend({
   name: 'New-Component',
@@ -68,7 +69,7 @@ export default Vue.extend({
         this.currentStatus = EnumCurrentStatus.WaitInput;
       } catch (err) {
         this.$Loading.error();
-        this.currentStatus = EnumCurrentStatus.WaitInput;
+        this.currentStatus = EnumCurrentStatus.GetError;
       }
     },
   },
@@ -95,6 +96,9 @@ export default Vue.extend({
 
 .in-progress > .row:first-child {
   background-color: yellow;
+}
+.get-error > .row:first-child {
+  background-color: red;
 }
 </style>
 
