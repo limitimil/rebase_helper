@@ -47,7 +47,7 @@ export default Vue.extend({
         url: "",
         branch: "",
       }];
-    }
+    },
     newSlot() {
       const newObj = {};
       Object.assign(newObj, this.payloads[this.payloads.length -1 ])
@@ -62,7 +62,7 @@ export default Vue.extend({
         const service = new RebaseService();
         while(this.payloads.length){
           await service.executeSingleTaskAsync(this.payloads[0]);
-          this.payload.shift();
+          this.payloads.shift();
         }
         this.$Loading.finish();
         this.currentStatus = EnumCurrentStatus.WaitInput;
