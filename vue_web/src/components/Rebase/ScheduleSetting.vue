@@ -1,10 +1,13 @@
 <template>
   <div class="schedule-root">
-    <div class="poc-hint">{{response}}</div>
-    <Button class="poc" @click="get">get</Button>
-    <Button class="poc" @click="put">put</Button>
-    <Button class="poc" @click="post">post</Button>
-    <Button class="poc" @click="delete2">delete</Button>
+    <div class="hack2">
+      <div class="poc-hint hack1">{{response}}</div>
+      <Button class="hack1" @click="get">get</Button>
+      <Button class="hack1" @click="post">post</Button>
+      <Button class="hack1" @click="delete2">delete</Button>
+      <Input v-model="docId" placeholder="docuemnt id"></Input>
+      <Input v-model="content" placeholder="content"></Input>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -18,25 +21,42 @@ export default Vue.extend({
   },
   data() {
     return {
-      response: '' as string
+      response: '' as string,
+      docId: '' as string,
+      content: `[
+        {
+                'repository_url':'http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting',
+                'branches': [
+                    'tool-CTIS-xxxx',
+                    'tool-CTIS-2149',
+                    ],
+                'plugin_actions': {
+                        'python-lint':{
+                                'name': 'python-lint',
+                                'targets': ['testtools', 'testutils', 'unittests'],
+                        }
+                }
+        },
+]`as string,
     };
   },
   methods: {
     async get() {
       let service = new ScheduleService();
-      this.response = await service.getAsync();
-    },
-    async put() {
-      let service = new ScheduleService();
-      this.response = await service.putAsync();
+      this.response = await service.getAllTask();
     },
     async post() {
       let service = new ScheduleService();
-      this.response = await service.postAsync();
+      const content = JSON.parse(this.content);
+      if(this.docId){
+        this.response = await service.updateTask(this.docId, content);
+      }else {
+        this.response = await service.createTask(content);
+      }
     },
     async delete2() {
       let service = new ScheduleService();
-      this.response = await service.deleteAsync();
+      this.response = await service.deleteTask(this.docId);
     },
   }
 });
