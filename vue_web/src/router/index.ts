@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
-import { RebaseSingleTask } from '@/components/Rebase';
+import { RebaseScheduleSetting, RebaseSingleTask } from '@/components/Rebase';
 
 Vue.use(VueRouter);
 
@@ -18,6 +18,12 @@ const routes: RouteConfig[] = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: RebaseSingleTask,
+  },
+  {
+    // TODO: router hierarchy should be adjust to make /rebase/schedule under /rebase
+    path: '/rebase/schedule',
+    name: 'rebase_schedule',
+    component: RebaseScheduleSetting,
   },
 ];
 
