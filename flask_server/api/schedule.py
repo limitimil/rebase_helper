@@ -1,4 +1,9 @@
 from __init__ import app
+from db import TASK
+
+from flask import jsonify
+from flask import request
+
 
 class Schedule:
     @app.route('/api/schedule', methods=['PUT'])
@@ -12,7 +17,8 @@ class Schedule:
         return 'shedule delete', 200 
     @app.route('/api/schedule', methods=['GET'])
     def get():
-        return 'shedule get', 200 
+        res = TASK.all()
+        return jsonify(res), 200 
 
 
 
