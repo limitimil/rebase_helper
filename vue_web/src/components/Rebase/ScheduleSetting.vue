@@ -1,5 +1,8 @@
 <template>
   <div class="schedule-root">
+    <div class="content">
+      <EditableRepositoryRecord></EditableRepositoryRecord>
+    </div>
     <div class="hack2">
       <div class="poc-hint hack1">{{response}}</div>
       <Button class="hack1" @click="get">get</Button>
@@ -13,11 +16,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import ScheduleService from '@/services/schedule';
+import EditableRepositoryRecord from './components/editable-repository-record.vue';
 
 export default Vue.extend({
   name: 'New-Component',
   props: [],
   components: {
+    EditableRepositoryRecord,
   },
   data() {
     return {
