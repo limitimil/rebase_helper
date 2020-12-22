@@ -10,6 +10,8 @@ import 'view-design/dist/styles/iview.css';
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+//Font Awesome
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 Vue.config.productionTip = false;
