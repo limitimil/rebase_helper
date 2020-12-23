@@ -1,7 +1,10 @@
 <template>
   <div class="schedule-root">
     <div class="content">
-      <EditableRepositoryRecord></EditableRepositoryRecord>
+      <EditableRepositoryRecord
+         :url.sync="url"
+         :branches.sync="branches"
+      />
     </div>
     <div class="hack2">
       <div class="poc-hint hack1">{{response}}</div>
@@ -26,6 +29,12 @@ export default Vue.extend({
   },
   data() {
     return {
+      //hack
+      url: "http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CyberSoft.MiniTis.Testing/branches",
+      branches: [
+        "bugfix-CTIS-2593",
+        "bugfix-CTIS-4080",
+        ],
       response: '' as string,
       docId: '' as string,
       content: `[
