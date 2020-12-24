@@ -23,5 +23,10 @@ export default class NewService {
     const res: AxiosResponse<any> = await axios.delete(url);
     return res.data;
   }
+  public async executeScheduledTasks(): Promise<any> {
+    const url = `api/${this.topic}/execute`;
+    const res: AxiosResponse<any> = await axios.post(url);
+    return res.data;
+  }
 }
 

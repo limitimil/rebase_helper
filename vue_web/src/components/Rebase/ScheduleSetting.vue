@@ -6,6 +6,7 @@
           <div class="d-flex justify-content-between">
             <Checkbox class="select-all" v-model="flagSelectAll" @on-change="handleSelectAll"> Select All</Checkbox>
             <i class="fas fa-plus" @click="handleAddNew" v-if="!flagAddNew" ></i>
+            <i class="fas fa-play" @click="handleExecute"></i>
             <i class="fas fa-trash-alt" @click="handleDelete"></i>
           </div>
         </div>
@@ -72,6 +73,10 @@ export default Vue.extend({
     },
     handleAddNew() {
       this.flagAddNew = true;
+    },
+    async handleExecute() {
+      const service = new ScheduleService();
+      await service.executeScheduledTasks();
     },
     async handleSave(record: RepositoryRecord) {
       const service = new ScheduleService();
