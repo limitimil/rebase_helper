@@ -4,6 +4,8 @@ from db import TASK
 from flask import jsonify
 from flask import request
 
+from models.repositoryConfig import RepositoryConfig
+from rebase_helper import RebaseHandler
 
 class Schedule:
 
@@ -33,5 +35,12 @@ class Schedule:
             r['id']=r.doc_id
         return jsonify(res), 200 
 
+    @app.route('/api/schedule/execute', methods=['POST'])
+    def execute_schedule():
+        rc = map( lambda k: RepositoryConfig(k), TASK.all())
+        rh = RebaseHandler()
+        rh.run_for_each_repo(rc)
+        rh.remove_all_workspace()
+        return 'Done', 200 
 
 
