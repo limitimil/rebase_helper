@@ -1,26 +1,26 @@
 <template>
   <div class="editable-repository-record-root d-flex">
-    <div class="operation d-inline hack2 " @click="toggle">
+    <div class="operation d-inline" @click="toggle">
       <!-- TODO: make font awsome icon as a component to save typing-->
       <i class="btn" :class="classOperationIcon"/>
     </div>
-    <div class="content hack3">
+    <div class="content">
       <div class="fields-wrapper" :class="classFieldsWrapper">
         <div class="fields" :class="classFields">
           <label class="d-inline" for="">repository url</label>
-          <TextTruncateTooltip :content="url" class="field-content" v-if="flagMode.View"/>
-          <Input class="field-content" v-model="url" v-if="flagMode.Edit"></Input>
+          <TextTruncateTooltip :content="value.repository_url" class="field-content" v-if="flagMode.View"/>
+          <Input class="field-content" v-model="value.repository_url" v-if="flagMode.Edit"></Input>
         </div>
         <div class="fields" :class="classFields">
           <label class="d-inline" for="">branches</label>
           <!-- TODO: should be filtered to be comma seperate format-->
-          <div class="field-content" v-if="flagMode.View">{{ branches }}</div>
-          <AutoElementSelect class="field-content" :value.sync="branches" v-if="flagMode.Edit"></AutoElementSelect>
+          <div class="field-content" v-if="flagMode.View">{{ value.branches }}</div>
+          <AutoElementSelect class="field-content" :value.sync="value.branches" v-if="flagMode.Edit"></AutoElementSelect>
         </div>
         <div class="fields" :class="classFields" v-if="flagMode.Edit">
           <label class="d-inline" for="">plugins</label>
           <!-- TODO: should be filtered to be formated json-->
-          <Input class="field-content" v-model="plugins" :disabled="!flagMode.Edit" :readonly="!flagMode.Edit" type="textarea"></Input>
+          <Input class="field-content" v-model="value.plugins" :disabled="!flagMode.Edit" :readonly="!flagMode.Edit" type="textarea"></Input>
         </div>
       </div>
     </div>
@@ -30,6 +30,7 @@
 import Vue, { PropType } from 'vue';
 import TextTruncateTooltip from '@/widgets/tooltip';
 import AutoElementSelect from '@/widgets/select';
+import { RepositoryRecord } from '@/classes/apiModel/';
 
 enum EnumMode{
   Edit,
@@ -39,8 +40,7 @@ enum EnumMode{
 export default Vue.extend({
   name: 'New-Component',
   props: { 
-    url: { type: String, default: '' },
-    branches: { type: Array, default: () => [] },
+    value: { type: RepositoryRecord, default: () => new RepositoryRecord() },
   }, 
   components: {
     TextTruncateTooltip,
