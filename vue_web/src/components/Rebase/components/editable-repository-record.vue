@@ -41,6 +41,7 @@ export default Vue.extend({
   name: 'New-Component',
   props: { 
     value: { type: RepositoryRecord, default: () => new RepositoryRecord() },
+    editMode: { type: Boolean, default: false },
   }, 
   components: {
     TextTruncateTooltip,
@@ -49,14 +50,19 @@ export default Vue.extend({
   data() {
     return {
       helloworold: 'helloworld' as string,
-      mode: EnumMode.View as EnumMode,
+      mode: this.editMode? EnumMode.Edit :EnumMode.View as EnumMode,
     };
   },
   methods: {
+    handleSave() {
+      const vm: any=this;
+      vm.$emit('save', vm.value );
+    },
     toggle() {
       const vm: any=this;
       switch(vm.mode){
         case EnumMode.Edit:
+          vm.handleSave();
           vm.mode = EnumMode.View;
           break;
         case EnumMode.View:

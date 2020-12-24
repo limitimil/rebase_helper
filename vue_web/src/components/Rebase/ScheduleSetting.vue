@@ -4,9 +4,14 @@
       <EditableRepositoryRecord
          v-for="record of dataList"
          :value="record"
-         :url.sync="record.repository_url"
-         :branches.sync="record.branches"
+         @save="handleSave"
       />
+      <EditableRepositoryRecord
+         :editMode="flagAddNew"
+         v-if="flagAddNew"
+         @save="handleSave"
+      />
+      <i class="fas fa-plus" @click="handleAddNew" v-if="!flagAddNew"></i>
     </div>
     <div class="hack2">
       <div class="poc-hint hack1">{{response}}</div>
@@ -22,6 +27,7 @@
 import Vue, { PropType } from 'vue';
 import ScheduleService from '@/services/schedule';
 import EditableRepositoryRecord from './components/editable-repository-record.vue';
+import { RepositoryRecord } from '@/classes/apiModel/';
 
 export default Vue.extend({
   name: 'New-Component',
@@ -55,12 +61,25 @@ export default Vue.extend({
         }
 `as string,
       dataList: [] as any[],
+      flagAddNew: false as boolean,
     };
   },
   methods: {
+    handleAddNew() {
+      this.flagAddNew = true;
+    },
+    async handleSave(record: RepositoryRecord) {
+      const service = new ScheduleService();
+      if(record.id){
+        this.response = await service.updateTask(record.id, record);
+      }else {
+        this.response = await service.createTask(record);
+      }
+      await this.get();
+    },
     async get() {
       let service = new ScheduleService();
-      this.response = await service.getAllTask();
+      this.dataList = await service.getAllTask();
     },
     async post() {
       let service = new ScheduleService();
@@ -77,8 +96,7 @@ export default Vue.extend({
     },
   },
   async created() {
-    let service = new ScheduleService();
-    this.dataList = await service.getAllTask();
+    await this.get();
   },
 });
 </script>
