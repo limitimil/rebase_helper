@@ -1,25 +1,33 @@
 <template>
   <div class="schedule-root">
-    <div class="content">
-      <EditableRepositoryRecord
-         v-for="record of dataList"
-         :value="record"
-         @save="handleSave"
-      />
-      <EditableRepositoryRecord
-         :editMode="flagAddNew"
-         v-if="flagAddNew"
-         @save="handleSave"
-      />
-      <i class="fas fa-plus" @click="handleAddNew" v-if="!flagAddNew"></i>
-    </div>
-    <div class="hack2">
-      <div class="poc-hint hack1">{{response}}</div>
-      <Button class="hack1" @click="get">get</Button>
-      <Button class="hack1" @click="post">post</Button>
-      <Button class="hack1" @click="delete2">delete</Button>
-      <Input v-model="docId" placeholder="docuemnt id"></Input>
-      <Input v-model="content" placeholder="content"></Input>
+    <div class="container">
+      <div class="row control-pannel">
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <Checkbox class="select-all" v-model="flagSelectAll" @on-change="handleSelectAll"> Select All</Checkbox>
+            <i class="fas fa-plus" @click="handleAddNew" v-if="!flagAddNew" ></i>
+            <i class="fas fa-trash-alt" @click="handleDelete"></i>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <EditableRepositoryRecord
+               :editMode="flagAddNew"
+               v-if="flagAddNew"
+               @save="handleSave"
+               class="col"
+               />
+          </div>
+        </div>
+      </div>
+      <div v-for="record of dataList" class="row">
+        <Checkbox v-model="record.selected" @on-change="checkSelectAll"></Checkbox>
+        <EditableRepositoryRecord
+           class="col"
+                                    :value="record"
+                                    @save="handleSave"
+                                    />
+      </div>
     </div>
   </div>
 </template>
@@ -37,34 +45,31 @@ export default Vue.extend({
   },
   data() {
     return {
-      //hack
-      url: "http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CyberSoft.MiniTis.Testing/branches",
-      branches: [
-        "bugfix-CTIS-2593",
-        "bugfix-CTIS-4080",
-        ],
-      response: '' as string,
-      docId: '' as string,
-      content: `
-        {
-                "repository_url":"http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting",
-                "branches": [
-                    "tool-CTIS-xxxx",
-                    "tool-CTIS-2149"
-                    ],
-                "plugin_actions": {
-                        "python-lint":{
-                                "name": "python-lint",
-                                "targets": ["testtools", "testutils", "unittests"],
-                        }
-                }
-        }
-`as string,
       dataList: [] as any[],
       flagAddNew: false as boolean,
+      flagSelectAll: false as boolean,
     };
   },
   methods: {
+    handleSelectAll(value: boolean) {
+      this.dataList.forEach((record: RepositoryRecord) => { record.selected = this.flagSelectAll; });
+    },
+    checkSelectAll(value: boolean) {
+      this.flagSelectAll = this.dataList.every((record: RepositoryRecord) => { return record.selected; })
+    },
+    async handleDelete() {
+      const service = new ScheduleService();
+      try {
+        const requestList = this.dataList.map( async ( record: RepositoryRecord ) => {
+          if ( record.selected) {
+            this.response = await service.deleteTask(record.id);
+          }
+        });
+        await Promise.all(requestList);
+      }finally{
+        this.get();
+      }
+    },
     handleAddNew() {
       this.flagAddNew = true;
     },
@@ -80,19 +85,7 @@ export default Vue.extend({
     async get() {
       let service = new ScheduleService();
       this.dataList = await service.getAllTask();
-    },
-    async post() {
-      let service = new ScheduleService();
-      const content = JSON.parse(this.content);
-      if(this.docId){
-        this.response = await service.updateTask(this.docId, content);
-      }else {
-        this.response = await service.createTask(content);
-      }
-    },
-    async delete2() {
-      let service = new ScheduleService();
-      this.response = await service.deleteTask(this.docId);
+      this.flagAddNew = false;
     },
   },
   async created() {
