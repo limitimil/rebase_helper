@@ -75,8 +75,14 @@ export default Vue.extend({
       this.flagAddNew = true;
     },
     async handleExecute() {
-      const service = new ScheduleService();
-      await service.executeScheduledTasks();
+      try {
+        this.$Loading.start();
+        const service = new ScheduleService();
+        await service.executeScheduledTasks();
+        this.$Loading.finish();
+      } catch (err) {
+        this.$Loading.error();
+      }
     },
     async handleSave(record: RepositoryRecord) {
       const service = new ScheduleService();
