@@ -2,8 +2,10 @@
   <div class="schedule-root">
     <div class="content">
       <EditableRepositoryRecord
-         :url.sync="url"
-         :branches.sync="branches"
+         v-for="record of dataList"
+         :value="record"
+         :url.sync="record.repository_url"
+         :branches.sync="record.branches"
       />
     </div>
     <div class="hack2">
@@ -37,21 +39,22 @@ export default Vue.extend({
         ],
       response: '' as string,
       docId: '' as string,
-      content: `[
+      content: `
         {
-                'repository_url':'http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting',
-                'branches': [
-                    'tool-CTIS-xxxx',
-                    'tool-CTIS-2149',
+                "repository_url":"http://tfs.cybersoft4u.com.tw:8080/tfs/SDD/TIS/_git/CloudTisTesting",
+                "branches": [
+                    "tool-CTIS-xxxx",
+                    "tool-CTIS-2149"
                     ],
-                'plugin_actions': {
-                        'python-lint':{
-                                'name': 'python-lint',
-                                'targets': ['testtools', 'testutils', 'unittests'],
+                "plugin_actions": {
+                        "python-lint":{
+                                "name": "python-lint",
+                                "targets": ["testtools", "testutils", "unittests"],
                         }
                 }
-        },
-]`as string,
+        }
+`as string,
+      dataList: [] as any[],
     };
   },
   methods: {
@@ -72,7 +75,11 @@ export default Vue.extend({
       let service = new ScheduleService();
       this.response = await service.deleteTask(this.docId);
     },
-  }
+  },
+  async created() {
+    let service = new ScheduleService();
+    this.dataList = await service.getAllTask();
+  },
 });
 </script>
 <style scoped lang="less">
