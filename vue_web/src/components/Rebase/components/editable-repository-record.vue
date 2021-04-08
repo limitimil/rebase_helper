@@ -22,6 +22,11 @@
           <!-- TODO: should be filtered to be formated json-->
           <Input class="field-content" v-model="value.plugins" :disabled="!flagMode.Edit" :readonly="!flagMode.Edit" type="textarea"></Input>
         </div>
+        <div class="fields" :class="classFields" v-if="flagMode.Edit">
+          <label class="d-inline" for="">reference_branch</label>
+          <!-- TODO: should be filtered to be formated json-->
+          <Input class="field-content" v-model="value.reference_branch" :disabled="!flagMode.Edit" :readonly="!flagMode.Edit"></Input>
+        </div>
       </div>
     </div>
   </div>
