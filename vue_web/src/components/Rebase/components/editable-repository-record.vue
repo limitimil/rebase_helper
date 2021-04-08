@@ -43,7 +43,7 @@ enum EnumMode{
 };
 
 export default Vue.extend({
-  name: 'New-Component',
+  name: 'Editable-Repository-Record',
   props: { 
     value: { type: RepositoryRecord, default: () => new RepositoryRecord() },
     editMode: { type: Boolean, default: false },
