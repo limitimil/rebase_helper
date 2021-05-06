@@ -1,6 +1,6 @@
 flask==1.0.2
 Werkzeug==0.16.1
-flask-cors==3.0.8
+flask-cors==3.0.9
 requests
 wtforms
 flask-bootstrap
